@@ -38,7 +38,13 @@ cities <- c("Charlotte", "Los Angeles", "Houston", "Indianapolis", "Jacksonville
 #> Call the function "read_weather" 
 #> Check by reading/glimpsing a single station's file
 
-
+directory <- "C:/Users/User/Documents/259-integrating-skills-hw/us-weather-history"
+setwd(directory)
+list  <- list.files(pattern = "*.csv")
+files <- read.csv("list",header = T)
+  
+file <-   read.csv("KCLT.csv",header = T) %>% mutate(station_name = cities[1]) %>% 
+ 
 
 # QUESTION 2
 #> Use map_dfr() and your new function to read in all 10 stations
