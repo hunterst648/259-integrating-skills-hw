@@ -5,7 +5,8 @@
 library(tidyverse)
 library(lubridate)
 library(DataExplorer)
-
+library(readr)
+library(plyr)
 #> These data are drawn from the fivethirtyeight article:
 #> http://fivethirtyeight.com/features/what-12-months-of-record-setting-temperatures-looks-like-across-the-u-s/
 #> The directory us-weather-history contains a data file for each of 10 cities, labelled by their station name
@@ -38,20 +39,27 @@ cities <- c("Charlotte", "Los Angeles", "Houston", "Indianapolis", "Jacksonville
 #> Call the function "read_weather" 
 #> Check by reading/glimpsing a single station's file
 
-directory <- "C:/Users/User/Documents/259-integrating-skills-hw/us-weather-history"
+directory <- "C:/Users/User/Documents/259-integrating-skills-hw"
 setwd(directory)
-list  <- list.files(pattern = "*.csv")
-files <- read.csv("list",header = T)
+list  <- dir('us-weather-history',pattern = "*.csv", full.names = T )
+
+file <-  read_csv(list)
   
-file <-   read.csv("KCLT.csv",header = T) %>% mutate(station_name = cities[1]) %>% 
- 
+#file <-   read.csv("KCLT.csv",header = T) %>% mutate(station_name = cities[1])
+  
+ read_weather <- function(st){
+   output <- read_csv(paste0("us-weather-history/",st,".csv")) %>% 
+     mutate(station_name = st, date=as.Date(date))
+   return(output)
+}
+ read_weather(list)
 
 # QUESTION 2
 #> Use map_dfr() and your new function to read in all 10 stations
 #> map_dfr() will take each dataframe and automatically bind them.
 #> Save the resulting dataset to "ds"
 
-
+#ds <-  map_dfr(read_weather()
 
 # QUESTION 3
 #> Make a factor called "city" based on the station variable
@@ -70,7 +78,8 @@ file <-   read.csv("KCLT.csv",header = T) %>% mutate(station_name = cities[1]) %
 #> At this point, your data should look like the "compiled_data.csv" file
 #> in data-clean. If it isn't, read in that file to use for the remaining
 #> questions so that you have the right data to work with.
-
+setwd("C:/Users/User/Documents/259-integrating-skills-hw")
+ds_clean <- read.csv( "data-clean/compiled_data.csv")
 # QUESTION 5
 #> Write a function that counts the number of extreme temperature days,
 #> where the actual min or max was equal to the (i.e., set the) record min/max
@@ -79,7 +88,8 @@ file <-   read.csv("KCLT.csv",header = T) %>% mutate(station_name = cities[1]) %
 #> and sort in descending order to show which city had the most:
 #> (Seattle, 20, Charlotte 12, Phoenix 12, etc...)
 #> Don't save this summary over the original dataset!
-
+record_temp <- . %>% count(ds_clean$actual_max_temp == ds_clean$record_max_temp)
+      
 
 
 # QUESTION 6
