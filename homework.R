@@ -52,14 +52,14 @@ file <-  read_csv(list)
      mutate(station_name = st, date=as.Date(date))
    return(output)
 }
- read_weather(list)
+ read_weather("KCLT")
 
 # QUESTION 2
 #> Use map_dfr() and your new function to read in all 10 stations
 #> map_dfr() will take each dataframe and automatically bind them.
 #> Save the resulting dataset to "ds"
 
-#ds <-  map_dfr(read_weather()
+ds <-  map_dfr(stations,read_weather)
 
 # QUESTION 3
 #> Make a factor called "city" based on the station variable
