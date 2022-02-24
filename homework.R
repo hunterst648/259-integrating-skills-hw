@@ -84,7 +84,9 @@ F_to_C <- function(fahrenhiet){
   C_round <- round(C, digits = 1)
   return(C_round)
 }
-x <- ds %>%  mutate(across(actual_mean_temp:record_max_temp, F_to_C))
+x <- ds %>%  mutate(across(actual_mean_temp:record_max_temp, F_to_C(.x)))
+x <- ds %>%  mutate(across(2:8, F_to_C(.x)))
+# I do not know why this isn't working. Uhhh
 
 ### CHECK YOUR WORK
 #> At this point, your data should look like the "compiled_data.csv" file
@@ -102,16 +104,33 @@ ds_clean <- read.csv( "data-clean/compiled_data.csv")
 #> and sort in descending order to show which city had the most:
 #> (Seattle, 20, Charlotte 12, Phoenix 12, etc...)
 #> Don't save this summary over the original dataset!
-record_temp <- . %>% function(item)
-  temp <- list(item)
-  count(ds_clean$actual_max_temp == ds_clean$record_max_temp)
-      
+#> 
+#> 
+#record_temp <-  . %>% ds_clean %>% group_by(city) %>% 
+#ds_clean$record_min_temp ds$record_max_temp) %>% 
+ #x_temp <-  mutate(count(ds$actual_min_temp== ds$record_min_temp))
+ #i <- length(ds_clean$actual_min_temp)
+ #for (i in (ds_clean$actual_min_temp)){
+ #if [i] == ds_clean$record_min_temp
+  #  x_temp <- ds_clean$actual_min_temp:city
+ #}
 
+x_temp <- ds_clean %>% filter(actual_min_temp == record_min_temp|
+                              actual_max_temp==record_max_temp)
+x_temp %>% group_by(city) %>% count()
 
 # QUESTION 6
 #> Pull out the month from the date and make "month" a factor
 #> Split the tibble by month into a list of tibbles 
-
+#> Month is the middle number ymd of the values in date
+#> 
+month_levels <- c(
+   "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+ )
+level <- c(1,2,3,4,5,6,7,8,9,10,11,12)
+ds_clean <- ds_clean %>% mutate(Month = factor(month(date),levels = level,  labels = month_levels))
+tbl_list <- ds_clean %>% group_split(month)
 
 
 # QUESTION 7
@@ -119,7 +138,9 @@ record_temp <- . %>% function(item)
 #> and the average_precipitation (across all cities), and between the actual and average mins/maxes
 #> Use a for loop, and print the month along with the resulting correlation
 #> Look at the documentation for the ?cor function if you've never used it before
-
+for (i in tbl_list){
+  
+}
 
 
 
