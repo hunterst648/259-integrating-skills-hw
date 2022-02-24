@@ -6,7 +6,7 @@ library(tidyverse)
 library(lubridate)
 library(DataExplorer)
 library(readr)
-library(plyr)
+library(dplyr)
 #> These data are drawn from the fivethirtyeight article:
 #> http://fivethirtyeight.com/features/what-12-months-of-record-setting-temperatures-looks-like-across-the-u-s/
 #> The directory us-weather-history contains a data file for each of 10 cities, labelled by their station name
@@ -66,13 +66,25 @@ ds <-  map_dfr(stations,read_weather)
 #> (station should be the level and city should be the label)
 #> Use fct_count to check that there are 365 days of data for each city 
 
+city <- factor(ds$station_name,levels = stations,labels = cities)
+fct_count(city)
+
+# I think that this is supposed to be added to the data frame ds?? I will do that
+# below just in case. 
+
+ds <- mutate(ds,City = factor(ds$station_name,levels = stations,labels = cities))
 
 # QUESTION 4
 #> Since we're scientists, let's convert all the temperatures to C
 #> Write a function to convert F to C, and then use mutate across to 
 #> convert all of the temperatures, rounded to a tenth of a degree
 
-
+F_to_C <- function(fahrenhiet){
+  C <- (fahrenhiet - 32)* 5/9 
+  C_round <- round(C, digits = 1)
+  return(C_round)
+}
+x <- ds %>%  mutate(across(actual_mean_temp:record_max_temp, F_to_C))
 
 ### CHECK YOUR WORK
 #> At this point, your data should look like the "compiled_data.csv" file
@@ -80,6 +92,8 @@ ds <-  map_dfr(stations,read_weather)
 #> questions so that you have the right data to work with.
 setwd("C:/Users/User/Documents/259-integrating-skills-hw")
 ds_clean <- read.csv( "data-clean/compiled_data.csv")
+
+
 # QUESTION 5
 #> Write a function that counts the number of extreme temperature days,
 #> where the actual min or max was equal to the (i.e., set the) record min/max
@@ -88,7 +102,9 @@ ds_clean <- read.csv( "data-clean/compiled_data.csv")
 #> and sort in descending order to show which city had the most:
 #> (Seattle, 20, Charlotte 12, Phoenix 12, etc...)
 #> Don't save this summary over the original dataset!
-record_temp <- . %>% count(ds_clean$actual_max_temp == ds_clean$record_max_temp)
+record_temp <- . %>% function(item)
+  temp <- list(item)
+  count(ds_clean$actual_max_temp == ds_clean$record_max_temp)
       
 
 
