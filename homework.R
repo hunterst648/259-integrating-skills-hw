@@ -45,8 +45,6 @@ list  <- dir('us-weather-history',pattern = "*.csv", full.names = T )
 
 file <-  read_csv(list)
   
-#file <-   read.csv("KCLT.csv",header = T) %>% mutate(station_name = cities[1])
-  
  read_weather <- function(st){
    output <- read_csv(paste0("us-weather-history/",st,".csv")) %>% 
      mutate(station_name = st, date=as.Date(date))
@@ -106,18 +104,13 @@ ds_clean <- read.csv( "data-clean/compiled_data.csv")
 #> Don't save this summary over the original dataset!
 #> 
 #> 
-#record_temp <-  . %>% ds_clean %>% group_by(city) %>% 
-#ds_clean$record_min_temp ds$record_max_temp) %>% 
- #x_temp <-  mutate(count(ds$actual_min_temp== ds$record_min_temp))
- #i <- length(ds_clean$actual_min_temp)
- #for (i in (ds_clean$actual_min_temp)){
- #if [i] == ds_clean$record_min_temp
-  #  x_temp <- ds_clean$actual_min_temp:city
- #}
-
-x_temp <- ds_clean %>% filter(actual_min_temp == record_min_temp|
-                              actual_max_temp==record_max_temp)
-x_temp %>% group_by(city) %>% count()
+  
+  x_temp <- . %>% ds_clean %>%  filter(actual_min_temp == record_min_temp|
+                                         actual_max_temp==record_max_temp) %>% 
+    group_by(city) 
+  output <- (count(x_temp$city))
+  output <- arrange(output,desc(freq))
+  print(output)
 
 # QUESTION 6
 #> Pull out the month from the date and make "month" a factor
@@ -149,16 +142,21 @@ for (i in tbl_list){
 #> grouped by city, then do the same thing grouped by month. 
 #> Finally, use plot_correlation to investigate correlations between the continuous variables only
 #> Check the documentation for plot_correlation for an easy way to do this
+library(DataExplorer)
+
+ds_clean %>% group_by(city) %>% boxplot(actual_mean_temp:record_precipitation)
+boxplot(ds_clean$actual_mean_temp:ds_clean$record_precipitation)
 
 
 
+plot_correlation(ds_clean,type = 'continuous')
 
 # QUESTION 9
 #> Create a scatterplot of actual_mean_temp (y axis) by date (x axis)
 #> Use facet_wrap to make a separate plot for each city (3 columns)
 #> Make the points different colors according to month
-
-
+ungroup(ds_clean)
+plot_scatterplot(ds_clean$actual_me, by = "date")
 
 
 # QUESTION 10
