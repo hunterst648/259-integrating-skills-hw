@@ -142,13 +142,12 @@ for (i in tbl_list){
 #> grouped by city, then do the same thing grouped by month. 
 #> Finally, use plot_correlation to investigate correlations between the continuous variables only
 #> Check the documentation for plot_correlation for an easy way to do this
-library(DataExplorer)
-
-ds_clean %>% group_by(city) %>% boxplot(actual_mean_temp:record_precipitation)
-boxplot(ds_clean$actual_mean_temp:ds_clean$record_precipitation)
-
-
-
+#> 
+ 
+for (i in 2:13){
+  boxplot(ds_clean[,i]~ city)
+  boxplot(ds_clean[,i]~ ds_clean$Month)}
+# ^^^^ I know this is probably hard coding but I think it is a clean method.
 plot_correlation(ds_clean,type = 'continuous')
 
 # QUESTION 9
