@@ -170,9 +170,15 @@ plot_correlation(ds_clean,type = 'continuous')
 #> Call the function in a map or loop to generate graphs for each month
 
 many_plots <- function(ds,AbM){
-  ggplot(ds)+ geom_point(aes(x= date, y = actual_mean_temp)) + geom_line()+
+  return_output <- ggplot(ds)+ geom_point(aes(x= date, y = actual_mean_temp)) + 
+    geom_line(aes(x= date, y = actual_mean_temp))+
     labs(title = AbM)
-  }
-  for (i in month_levels)
+savePlot("eda/",AbM,"actual_temps_plot",type = "png")
+  return(return_output)
+}
+
+  for (i in month_levels){
     many_plots(ds_clean,i)
+    }
 # So I don't understand why this function wont take my second input. 
+# so I got the second input issue but now I am testing the for loop. 
