@@ -154,8 +154,10 @@ plot_correlation(ds_clean,type = 'continuous')
 #> Create a scatterplot of actual_mean_temp (y axis) by date (x axis)
 #> Use facet_wrap to make a separate plot for each city (3 columns)
 #> Make the points different colors according to month
-ungroup(ds_clean)
-plot_scatterplot(ds_clean$actual_me, by = "date")
+
+  
+ ggplot(ds_clean)+
+   geom_point(aes(x=date, y = actual_mean_temp,colour= Month))+facet_wrap(city)
 
 
 # QUESTION 10
@@ -167,4 +169,10 @@ plot_scatterplot(ds_clean$actual_me, by = "date")
 #> The eda folder has an example of what each plot should look like
 #> Call the function in a map or loop to generate graphs for each month
 
-
+many_plots <- function(ds,AbM){
+  ggplot(ds)+ geom_point(aes(x= date, y = actual_mean_temp)) + geom_line()+
+    labs(title = AbM)
+  }
+  for (i in month_levels)
+    many_plots(ds_clean,i)
+# So I don't understand why this function wont take my second input. 
