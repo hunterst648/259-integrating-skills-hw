@@ -123,7 +123,7 @@ month_levels <- c(
  )
 level <- c(1,2,3,4,5,6,7,8,9,10,11,12)
 ds_clean <- ds_clean %>% mutate(Month = factor(month(date),levels = level,  labels = month_levels))
-tbl_list <- ds_clean %>% group_split(month)
+tbl_list <- ds_clean %>% group_split(Month)
 
 
 # QUESTION 7
@@ -131,9 +131,17 @@ tbl_list <- ds_clean %>% group_split(month)
 #> and the average_precipitation (across all cities), and between the actual and average mins/maxes
 #> Use a for loop, and print the month along with the resulting correlation
 #> Look at the documentation for the ?cor function if you've never used it before
-for (i in tbl_list){
+ds_clean %>% group_by(Month,city)
+cor(ds_clean$actual_precipitation,ds_clean$average_precipitation)
+
+for (mi in month_levels){
+for (i in length(ds_clean)){
+  if (ds_clean[[i,16]]== ds_clean$Month[mi])
+  cor_data <- ds_clean[i,1:17]
+  #select(ds_clean,Month == i )
+  #cor(ds_clean$actual_precipitation,ds_clean$average_precipitation)
   
-}
+}}
 
 
 
