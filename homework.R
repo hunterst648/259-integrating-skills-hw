@@ -132,15 +132,13 @@ tbl_list <- ds_clean %>% group_split(Month)
 #> Use a for loop, and print the month along with the resulting correlation
 #> Look at the documentation for the ?cor function if you've never used it before
 
-
-
 for (mi in (month_levels)){
   for (i in nrow(ds_clean)){
  if (str_detect(ds_clean$Month[i], mi)== TRUE)
   cor_data[i] <- bind_rows(ds_clean[i,])
   }
-  correlations[mi] <-  cor(cor_data$actual_precipitation,cor_data$average_precipitation)
- cor(cor_data$actual_min_temp,cor_data$average_min_temp) 
+  corrs <- cor(cor_data$actual_precipitation,cor_data$average_precipitation)+
+ cor(cor_data$actual_min_temp,cor_data$average_min_temp) +
  cor(cor_data$actual_max_temp,cor_data$average_max_temp)
 }
 
