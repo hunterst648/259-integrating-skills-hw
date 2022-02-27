@@ -83,7 +83,7 @@ F_to_C <- function(fahrenhiet){
   return(C_round)
 }
 x <- ds %>%  mutate(across(actual_mean_temp:record_max_temp, F_to_C(.x)))
-x <- ds %>%  mutate(across(2:8, F_to_C(.x)))
+x <- ds %>%  mutate(across( F_to_C(actual_mean_temp:record_max_temp)))
 # I do not know why this isn't working. Uhhh
 
 ### CHECK YOUR WORK
@@ -135,12 +135,18 @@ tbl_list <- ds_clean %>% group_split(Month)
 for (mi in (month_levels)){
   for (i in nrow(ds_clean)){
  if (str_detect(ds_clean$Month[i], mi)== TRUE)
-  cor_data[i] <- bind_rows(ds_clean[i,])
+  cor_data[i] <- (ds_clean[i,])
   }
-  corrs <- cor(cor_data$actual_precipitation,cor_data$average_precipitation)+
+  corrs <- (mi) + cor(cor_data$actual_precipitation,cor_data$average_precipitation)+
  cor(cor_data$actual_min_temp,cor_data$average_min_temp) +
  cor(cor_data$actual_max_temp,cor_data$average_max_temp)
+  print(corrs)
 }
+#> I am not sure why this wont work?? I am trying to build a temp data frame, cor_data
+#> Then perform the appropriate corr. on that data frame and save the results in a new variable 
+#> called corr It should go through ds_clean row by row checking for the month 
+#> that matches the items in month_levels. Ideally the data frame will just have data from
+#> that month then repopulate with data equal to the next month. 
 
 # QUESTION 8
 #> Use the Data Explorer package to plot boxplots of all of the numeric variables in the dataset
@@ -173,17 +179,18 @@ plot_correlation(ds_clean,type = 'continuous')
 #> The function should save the plot as "eda/month_name.png"
 #> The eda folder has an example of what each plot should look like
 #> Call the function in a map or loop to generate graphs for each month
-
+getwd()
 many_plots <- function(ds,AbM){
   return_output <- ggplot(ds)+ geom_point(aes(x= date, y = actual_mean_temp)) + 
     geom_line(aes(x= date, y = actual_mean_temp))+
     labs(title = AbM)
-savePlot("eda/",AbM,"actual_temps_plot",type = "png")
+  savePlot("eda/Month_",AbM,type = "png")
+ # png(filename = "eda/Month_",AbM,".png")
   return(return_output)
 }
 
   for (i in month_levels){
     many_plots(ds_clean,i)
     }
-# So I don't understand why this function wont take my second input. 
-# so I got the second input issue but now I am testing the for loop. 
+# error in savePlot: no such device???
+# neither savePlot nor png are working for me??
