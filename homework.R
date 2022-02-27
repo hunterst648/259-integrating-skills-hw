@@ -131,19 +131,18 @@ tbl_list <- ds_clean %>% group_split(Month)
 #> and the average_precipitation (across all cities), and between the actual and average mins/maxes
 #> Use a for loop, and print the month along with the resulting correlation
 #> Look at the documentation for the ?cor function if you've never used it before
-ds_clean %>% group_by(Month,city)
-cor(ds_clean$actual_precipitation,ds_clean$average_precipitation)
-
-for (mi in month_levels){
-for (i in length(ds_clean)){
-  if (ds_clean[[i,16]]== ds_clean$Month[mi])
-  cor_data <- ds_clean[i,1:17]
-  #select(ds_clean,Month == i )
-  #cor(ds_clean$actual_precipitation,ds_clean$average_precipitation)
-  
-}}
 
 
+
+for (mi in (month_levels)){
+  for (i in nrow(ds_clean)){
+ if (str_detect(ds_clean$Month[i], mi)== TRUE)
+  cor_data[i] <- bind_rows(ds_clean[i,])
+  }
+  correlations[mi] <-  cor(cor_data$actual_precipitation,cor_data$average_precipitation)
+ cor(cor_data$actual_min_temp,cor_data$average_min_temp) 
+ cor(cor_data$actual_max_temp,cor_data$average_max_temp)
+}
 
 # QUESTION 8
 #> Use the Data Explorer package to plot boxplots of all of the numeric variables in the dataset
